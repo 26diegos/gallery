@@ -153,15 +153,15 @@ function DownloadButton({ arrayItems }) {
   }
 
   function multipleDownload() {
-    var zip = new JSZip();
+    let zip = new JSZip();
 
-    zip.file(
-      'file',
-      urlToPromise(
-        'https://s3.amazonaws.com/incode-photoshare/stage/original/9a330f76-7627-4393-9a59-67838182c96b_1569713979042.jpg'
-      ),
-      { binary: true }
-    );
+    arrayItems.forEach((item, index) => {
+      if (item.selected) {
+        zip.file('file' + index + '.jpg', urlToPromise(item.originalPhotoUrl), {
+          binary: true
+        });
+      }
+    });
 
     zip.generateAsync({ type: 'blob' }).then(function callback(blob) {
       saveAs(blob, 'example.zip');
