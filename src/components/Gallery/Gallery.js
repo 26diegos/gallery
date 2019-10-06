@@ -3,14 +3,14 @@ import './Gallery.css';
 import downloadImage from './images/group-2-copy-17@3x.png';
 import cx from 'classnames';
 import { ReactBnbGallery } from 'react-bnb-gallery';
-const axios = require('axios').default;
-var JSZip = require('jszip');
-var JSZipUtils = require('jszip-utils');
-var saveAs = require('file-saver');
+import axios from 'axios';
+import JSZip from 'jszip';
+import JSZipUtils from 'jszip-utils';
+import saveAs from 'file-saver';
 
 const headers = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
+  Accept: 'application/json',
   'api-version': '1.0',
   'x-api-key': 'eRyFkruJWy3cgIpWRSBpL5wGLiG9EjmZ4YqdVvIk',
   'X-Incode-Hardware-Id':
@@ -19,11 +19,10 @@ const headers = {
 
 function Images({ isActive, photos, onClick }) {
   return photos.map(item => (
-    <div className="iconContainer">
+    <div className="iconContainer" key={item.photoId}>
       <img
         src={item.resizedPhotoUrl}
         className={cx('gallery__img', { selected: item.selected })}
-        key={item.photoId}
         onClick={() => {
           onClick(item.index);
         }}
@@ -41,13 +40,30 @@ function Images({ isActive, photos, onClick }) {
 function Header({ isActive, onClick, selected }) {
   return (
     <div>
-      <header
-        className={cx('main-head', { active: isActive })}
-        onClick={onClick}
-      >
-        {isActive ? 'Cancel' : 'Select photos'}
+      <header className={cx('main-head', { active: isActive })}>
+        <img
+          src="https://cdn.zeplin.io/5d8a3013bcf7fd15ed04e867/assets/D0F010F0-C89A-47CD-B9B5-CBB410779868.svg"
+          className="logo"
+          alt=""
+        />
+        <nav role="menu">
+          <ul>
+            <li>
+              {isActive ? (
+                <div onClick={onClick}>Cancel</div>
+              ) : (
+                <div onClick={onClick}>Select photos</div>
+              )}
+            </li>
+            <li>
+              <DownloadButton
+                arrayItems={selected}
+                isActive={isActive}
+              ></DownloadButton>
+            </li>
+          </ul>
+        </nav>
       </header>
-      <DownloadButton arrayItems={selected}></DownloadButton>
     </div>
   );
 }
@@ -56,7 +72,6 @@ function Gallery() {
   const [isActive, setActive] = useState(false);
   const [itemsToSelect, setSelected] = useState([]);
   const [galleryOpened, setGalleryOpened] = useState(false);
-  const [selectedItems, setSelectedItems] = useState([]);
   const [photoIndex, setPhotoIndex] = useState(0);
 
   useEffect(() => {
@@ -89,41 +104,32 @@ function Gallery() {
     const test = itemsToSelect;
     test[i].selected = !test[i].selected;
     setSelected([...test]);
-
-    if (test[i].selected) setSelectedItems([...selectedItems, test[i]]);
-    else
-      setSelectedItems(
-        selectedItems.filter(item => test[i].selected !== item.selected)
-      );
   }
 
   const cleanSelections = () => {
     itemsToSelect.map(item => (item.selected = false));
-    setSelectedItems([]);
   };
 
   return (
     <div className="Gallery">
-      <div className="wrapper">
-        <Header
-          isActive={isActive}
-          onClick={toggleActive}
-          selected={selectedItems}
-        />
-        <div className="galleryDiego">
-          <Images
-            photos={itemsToSelect}
-            onClick={isActive ? handleSelect : toggleGallery}
-            isActive={isActive}
-          />
-        </div>
-        <Slideshow
-          galleryOpened={galleryOpened}
-          onClick={toggleGallery}
+      <Header
+        isActive={isActive}
+        onClick={toggleActive}
+        selected={itemsToSelect}
+      />
+      <div className="galleryDiego">
+        <Images
           photos={itemsToSelect}
-          index={photoIndex}
-        ></Slideshow>
+          onClick={isActive ? handleSelect : toggleGallery}
+          isActive={isActive}
+        />
       </div>
+      <Slideshow
+        galleryOpened={galleryOpened}
+        onClick={toggleGallery}
+        photos={itemsToSelect}
+        index={photoIndex}
+      ></Slideshow>
     </div>
   );
 }
@@ -139,7 +145,7 @@ function Slideshow({ galleryOpened, onClick, photos, index }) {
   );
 }
 
-function DownloadButton({ arrayItems }) {
+function DownloadButton({ arrayItems, isActive }) {
   function urlToPromise(url) {
     return new Promise(function(resolve, reject) {
       JSZipUtils.getBinaryContent(url, function(err, data) {
@@ -152,11 +158,13 @@ function DownloadButton({ arrayItems }) {
     });
   }
 
+  const selectedItems = arrayItems.filter(item => item.selected);
+
   function multipleDownload() {
     let zip = new JSZip();
 
     arrayItems.forEach((item, index) => {
-      if (item.selected) {
+      if (!isActive || item.selected) {
         zip.file('file' + index + '.jpg', urlToPromise(item.originalPhotoUrl), {
           binary: true
         });
@@ -169,9 +177,16 @@ function DownloadButton({ arrayItems }) {
   }
 
   return (
-    <p onClick={multipleDownload}>
-      {'Download ' + arrayItems.length + ' images'}
-    </p>
+    <div
+      className={cx('button', {
+        btnDisabled: isActive && !selectedItems.length
+      })}
+      onClick={multipleDownload}
+    >
+      {isActive
+        ? 'Download ' + selectedItems.length + ' images'
+        : 'Download All'}
+    </div>
   );
 }
 

@@ -39,7 +39,51 @@
 }
 
 .main-head {
-  color: black;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  padding: 1vw;
+}
+
+nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  margin-right: 1vw;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #20263d;
+}
+
+.button {
+  display: flex;
+  background-color: #00b2fd; /* Green */
+  border: none;
+  color: white;
+  width: 194px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+}
+
+.btnDisabled {
+  pointer-events:none;
 }
 
 .active {
@@ -76,7 +120,7 @@ img.thumbnail {
 }
 
 img.photo {
-  border: 5px solid white;
+  border: 3px solid white;
 }
 
 .gallery-figcaption--thumbnails
@@ -91,8 +135,8 @@ img.photo {
   li
   button.thumbnail-button:hover
   img {
-    outline: 2px solid white;
-    outline-offset: -2px;
+  outline: 2px solid white;
+  outline-offset: -2px;
 }
 
 .downloadImage {
