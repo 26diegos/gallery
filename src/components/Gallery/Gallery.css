@@ -69,3 +69,32 @@
 .iconContainer {
   position: relative;
 }
+
+img.thumbnail {
+  object-fit: cover;
+  border-width: medium;
+}
+
+img.photo {
+  border: 5px solid white;
+}
+
+.gallery-figcaption--thumbnails
+  .caption-thumbnails
+  ul.thumbnails-list
+  li
+  button.thumbnail-button.active
+  img,
+.gallery-figcaption--thumbnails
+  .caption-thumbnails
+  ul.thumbnails-list
+  li
+  button.thumbnail-button:hover
+  img {
+    outline: 2px solid white;
+    outline-offset: -2px;
+}
+
+.downloadImage {
+  visibility: hidden;
+}

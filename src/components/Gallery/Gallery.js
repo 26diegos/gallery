@@ -17,7 +17,7 @@ const headers = {
     'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJXRUJfQVBQX0FETUlOI92iwicm9sZSI6IkFETUlOIiwiZXhwIjoxNTc3NjM5MDYxLCJpYXQiOjE1Njk4NTk0NjF9.DKD1S8MbhZ_dmbVOFCzWwfWz4ngJDvBJgL9h6n3Oe7I54'
 };
 
-function Images({ photos, onClick }) {
+function Images({ isActive, photos, onClick }) {
   return photos.map(item => (
     <div className="iconContainer">
       <img
@@ -25,13 +25,15 @@ function Images({ photos, onClick }) {
         className={cx('gallery__img', { selected: item.selected })}
         key={item.photoId}
         onClick={() => {
-          onClick(item.number);
+          onClick(item.index);
         }}
         alt=""
       />
-      <a href={item.originalPhotoUrl} download>
-        <img src={downloadImage} className="downloadIcon" alt="" />
-      </a>
+      <div className={isActive ? 'downloadImage' : null}>
+        <a href={item.originalPhotoUrl} download>
+          <img src={downloadImage} className="downloadIcon" alt="" />
+        </a>
+      </div>
     </div>
   ));
 }
@@ -55,6 +57,7 @@ function Gallery() {
   const [itemsToSelect, setSelected] = useState([]);
   const [galleryOpened, setGalleryOpened] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [photoIndex, setPhotoIndex] = useState(0);
 
   useEffect(() => {
     axios
@@ -64,14 +67,16 @@ function Gallery() {
       )
       .then(response => {
         response.data.photos.forEach((element, index) => {
-          element.number = index + 1;
+          element.index = index;
           element.selected = false;
+          element.photo = element.resizedPhotoUrl;
         });
         setSelected(response.data.photos);
       });
   }, []);
 
-  const toggleGallery = () => {
+  const toggleGallery = phIndex => {
+    if (!galleryOpened) setPhotoIndex(phIndex);
     setGalleryOpened(!galleryOpened);
   };
 
@@ -82,13 +87,13 @@ function Gallery() {
 
   function handleSelect(i) {
     const test = itemsToSelect;
-    test[i - 1].selected = !test[i - 1].selected;
+    test[i].selected = !test[i].selected;
     setSelected([...test]);
 
-    if (test[i - 1].selected) setSelectedItems([...selectedItems, test[i - 1]]);
+    if (test[i].selected) setSelectedItems([...selectedItems, test[i]]);
     else
       setSelectedItems(
-        selectedItems.filter(item => test[i - 1].selected !== item.selected)
+        selectedItems.filter(item => test[i].selected !== item.selected)
       );
   }
 
@@ -109,21 +114,28 @@ function Gallery() {
           <Images
             photos={itemsToSelect}
             onClick={isActive ? handleSelect : toggleGallery}
+            isActive={isActive}
           />
         </div>
         <Slideshow
           galleryOpened={galleryOpened}
           onClick={toggleGallery}
           photos={itemsToSelect}
+          index={photoIndex}
         ></Slideshow>
       </div>
     </div>
   );
 }
 
-function Slideshow({ galleryOpened, onClick, photos }) {
+function Slideshow({ galleryOpened, onClick, photos, index }) {
   return (
-    <ReactBnbGallery show={galleryOpened} photos={photos} onClose={onClick} />
+    <ReactBnbGallery
+      show={galleryOpened}
+      photos={photos}
+      onClose={onClick}
+      activePhotoIndex={index}
+    />
   );
 }
 
