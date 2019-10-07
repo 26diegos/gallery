@@ -83,6 +83,7 @@ function Gallery() {
       .then(response => {
         response.data.photos.forEach((element, index) => {
           element.index = index;
+          element.caption = 'Download';
           element.selected = false;
           element.photo = element.resizedPhotoUrl;
         });
@@ -124,24 +125,13 @@ function Gallery() {
           isActive={isActive}
         />
       </div>
-      <Slideshow
-        galleryOpened={galleryOpened}
-        onClick={toggleGallery}
+      <ReactBnbGallery
+        show={galleryOpened}
+        onClose={toggleGallery}
         photos={itemsToSelect}
-        index={photoIndex}
-      ></Slideshow>
+        activePhotoIndex={photoIndex}
+      ></ReactBnbGallery>
     </div>
-  );
-}
-
-function Slideshow({ galleryOpened, onClick, photos, index }) {
-  return (
-    <ReactBnbGallery
-      show={galleryOpened}
-      photos={photos}
-      onClose={onClick}
-      activePhotoIndex={index}
-    />
   );
 }
 
