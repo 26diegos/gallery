@@ -68,7 +68,7 @@ function Header({ isActive, onClick, selected }) {
   );
 }
 
-function Gallery() {
+function Gallery({ match }) {
   const [isActive, setActive] = useState(false);
   const [itemsToSelect, setSelected] = useState([]);
   const [galleryOpened, setGalleryOpened] = useState(false);
@@ -77,7 +77,7 @@ function Gallery() {
   useEffect(() => {
     axios
       .get(
-        'https://photoshare-stage-api.incodesmile.com/photoshare/photos/get?uuid=cb46f769-e3ec-423b-bc94-f2ab251c1fba',
+        `https://photoshare-stage-api.incodesmile.com/photoshare/photos/get?uuid=${match.params.uuid}`,
         { headers }
       )
       .then(response => {
