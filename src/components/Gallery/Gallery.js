@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { ReactBnbGallery } from 'react-bnb-gallery';
 import getImages from '../../functions/getImages';
 import zipFile from '../../functions/zipFile';
+import logo from '../../assets/logo.png';
 
 function Images({ isActive, photos, onClick }) {
   return photos.map(item => (
@@ -30,18 +31,16 @@ function Header({ isActive, onClick, selected }) {
   return (
     <div>
       <header className={cx('main-head', { active: isActive })}>
-        <img
-          src="https://cdn.zeplin.io/5d8a3013bcf7fd15ed04e867/assets/D0F010F0-C89A-47CD-B9B5-CBB410779868.svg"
-          className="logo"
-          alt=""
-        />
+        <img src={logo} className="logo" alt="" />
         <nav role="menu">
           <ul>
             <li>
               {isActive ? (
                 <div onClick={onClick}>Cancel</div>
               ) : (
-                <div onClick={onClick}>Select photos</div>
+                <div className="selectPhotos" onClick={onClick}>
+                  Select photos
+                </div>
               )}
             </li>
             <li>

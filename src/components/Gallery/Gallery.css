@@ -17,34 +17,9 @@
   grid-column: 1 / 1;
 }
 
-@media all and (min-width: 320px) {
-  .galleryDiego {
-    grid-template-columns: repeat(1, minmax(8rem, 1fr));
-    grid-auto-rows: 1fr;
-  }
-}
-
-@media all and (min-width: 768px) {
-  .galleryDiego {
-    grid-template-columns: repeat(3, minmax(8rem, 1fr));
-    grid-auto-rows: 1fr;
-  }
-}
-
-@media all and (min-width: 1024px) {
-  .galleryDiego {
-    grid-template-columns: repeat(6, minmax(8rem, 1fr));
-    grid-auto-rows: 1fr;
-  }
-}
-
 .main-head {
   display: flex;
   align-items: center;
-}
-
-.logo {
-  padding: 1vw;
 }
 
 nav {
@@ -70,6 +45,38 @@ nav li {
   color: #20263d;
 }
 
+@media all and (min-width: 320px) {
+  .galleryDiego {
+    grid-template-columns: repeat(1, minmax(8rem, 1fr));
+    grid-auto-rows: 1fr;
+  }
+}
+
+@media all and (min-width: 768px) {
+  .galleryDiego {
+    grid-template-columns: repeat(3, minmax(8rem, 1fr));
+    grid-auto-rows: 1fr;
+  }
+}
+
+@media all and (min-width: 1024px) {
+  .galleryDiego {
+    grid-template-columns: repeat(6, minmax(8rem, 1fr));
+    grid-auto-rows: 1fr;
+  }
+}
+
+@media screen and (max-width: 600px){
+  nav ul {
+    -webkit-flex-direction: column;
+    flex-direction: column;
+  }
+}
+
+.logo {
+  padding: 1vw;
+}
+
 .button {
   display: flex;
   background-color: #00b2fd; /* Green */
@@ -79,11 +86,11 @@ nav li {
   height: 50px;
   align-items: center;
   justify-content: center;
-  border-radius: 3px;
+  border-radius: 5.6px;
 }
 
 .btnDisabled {
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .active {
@@ -141,4 +148,8 @@ img.photo {
 
 .downloadImage {
   visibility: hidden;
+}
+
+.selectPhotos {
+  opacity: .5;
 }
