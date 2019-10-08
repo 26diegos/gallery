@@ -15,14 +15,7 @@ function getImages(uuid) {
       `https://photoshare-stage-api.incodesmile.com/photoshare/photos/get?uuid=${uuid}`,
       { headers }
     )
-    .then(response => {
-      response.data.photos.forEach((element, index) => {
-        element.index = index;
-        element.selected = false;
-        element.photo = element.resizedPhotoUrl;
-      });
-      return response.data.photos;
-    });
+    .then(response => response.data.photos);
 }
 
 export default getImages;

@@ -65,7 +65,14 @@ function Gallery({ match }) {
 
   useEffect(() => {
     getImages(match.params.uuid).then(photos => {
-      setSelected(photos);
+      setSelected(
+        photos.map((photo, index) => ({
+          ...photo,
+          index,
+          selected: false,
+          photo: photo.resizedPhotoUrl
+        }))
+      );
     });
   }, [match.params.uuid]);
 
