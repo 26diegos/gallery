@@ -71,6 +71,17 @@ nav li {
   nav ul {
     -webkit-flex-direction: column;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .main-head {
+    -webkit-flex-direction: column;
+    flex-direction: column;
+  }
+
+  nav {
+    margin-left: 0px;
   }
 }
 
